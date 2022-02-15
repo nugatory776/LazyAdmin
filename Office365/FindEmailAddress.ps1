@@ -3,7 +3,7 @@
   Find email address in Office 365
 
 .DESCRIPTION
-  Search trough your mailboxes, distributions groups and Office 365 groups for an Email Addresses or part 
+  Search trough your mailboxes, distributions groups, Office 365 groups, and public folders for an Email Addresses or part 
   of an email address.
 
 .OUTPUTS
@@ -117,6 +117,17 @@ Function Search-Groups {
   }
 }
 
+Function Search-PublicFolders {
+  <#
+  .SYNOPSIS
+    Search for email address in the public folders
+  #>
+  process {
+    Write-Host "Searching in public folders for $emailAddress" -ForegroundColor Cyan
+    Get-MailPublicFolder -Filter "EmailAddresses -like '*$emailAddress*'"
+  }
+}
+
 Function Find-EmailAddress{
   <#
     .SYNOPSIS
@@ -128,6 +139,7 @@ Function Find-EmailAddress{
     $result += Search-Mailboxes
     $result += Search-Distributionlists
     $result += Search-Groups
+    $result += Search-PublicFolders
 
     $result | ForEach {
         [pscustomobject]@{
